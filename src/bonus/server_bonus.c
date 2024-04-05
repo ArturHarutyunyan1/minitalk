@@ -11,6 +11,37 @@
 /* ************************************************************************** */
 #include "../../include/minitalk_bonus.h"
 
+void	print_minitalk(void)
+{
+	ft_printf("\033[2J\033[1;1H");
+	ft_printf("\n\n\n");
+	ft_printf("                                                 ");
+	ft_printf("\033[1;34m");
+	ft_printf("███╗░░░███╗██╗███╗░░██╗██╗████████╗░█████╗░██╗░░░░░██╗░░██╗\n");
+	ft_printf("                                                 ");
+	ft_printf("████╗░████║██║████╗░██║██║╚══██╔══╝██╔══██╗██║░░░░░██║░██╔╝\n");
+	ft_printf("                                                 ");
+	ft_printf("██╔████╔██║██║██╔██╗██║██║░░░██║░░░███████║██║░░░░░█████═╝░\n");
+	ft_printf("                                                 ");
+	ft_printf("██║╚██╔╝██║██║██║╚████║██║░░░██║░░░██╔══██║██║░░░░░██╔═██╗░\n");
+	ft_printf("                                                 ");
+	ft_printf("██║░╚═╝░██║██║██║░╚███║██║░░░██║░░░██║░░██║███████╗██║░╚██\n");
+	ft_printf("                                                 ");
+	ft_printf("╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝\n");
+	ft_printf("                                                 ");
+	ft_printf("\033[0;36m");
+}
+
+void	print_details(pid_t pid)
+{
+	ft_printf("         ");
+	ft_printf("Welcome to arturhar's Minitalk server!\n");
+	ft_printf("                                                 ");
+	ft_printf("                  ");
+	ft_printf("Server PID - %d", pid);
+	ft_printf("\n\n");
+}
+
 void	receive_message(int signal, siginfo_t *info, void *s)
 {
     static int	bit;
@@ -41,7 +72,8 @@ int	main(int argc, char **argv)
         return (1);
     }
     pid = getpid();
-    ft_printf("Server PID - %d\n", pid);
+    print_minitalk();
+    print_details(pid);
     (void)argv;
     sig.sa_sigaction = receive_message;
     sigemptyset(&sig.sa_mask);

@@ -18,7 +18,4 @@
 # include <signal.h>
 # include <unistd.h>
 
-void	receive_message(int signal);
-void	send_message(pid_t pid, int i);
-
 #endif
