@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   minitalk_bonus.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arturhar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,42 +9,16 @@
 /*   Updated: 2024/05/04 13:29:05 by arturhar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../include/minitalk.h"
+#ifndef MINITALK_BONUS_H
+# define MINITALK_BONUS_H
 
-void	receive_message(int signal)
-{
-	static int	bit;
-	static int	i;
+# include "../ft_printf/include/ft_printf.h"
+# include "../libft/libft.h"
+# include <unistd.h>
+# include <signal.h>
+# include <unistd.h>
 
-	if (signal == SIGUSR1)
-		i |= (0x01 << bit);
-	bit++;
-	if (bit == 8)
-	{
-		ft_printf("%c", i);
-		bit = 0;
-		i = 0;
-	}
-}
+void	receive_message(int signal, siginfo_t *info, void *s);
+void	send_message(pid_t pid, int i);
 
-int	main(int argc, char **argv)
-{
-	pid_t	pid;
-
-    if (argc != 1)
-    {
-        ft_printf("WRONG FORMAT!!!\n");
-        ft_printf("USAGE: ./server\n");
-        return (1);
-    }
-	pid = getpid();
-	ft_printf("Server PID - %d\n", pid);
-    (void)argv;
-    while (argc == 1)
-    {
-        signal(SIGUSR1, receive_message);
-        signal(SIGUSR2, receive_message);
-        pause();
-    }
-    return (0);
-}
+#endif

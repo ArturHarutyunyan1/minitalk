@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror
 PRINTF_DIR = ft_printf
 LIBFT_DIR = libft
 SRC_DIR = src
+BONUS_DIR = src/bonus
 
 SRCS = $(SRC_DIR)/client.c \
        $(SRC_DIR)/server.c \
@@ -28,6 +29,14 @@ $(CNAME): $(OBJS)
 $(SNAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(SNAME) $(SRC_DIR)/server.o $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
 
+bonus: $(BONUS_DIR)/client_bonus $(BONUS_DIR)/server_bonus
+
+$(BONUS_DIR)/client_bonus: $(BONUS_DIR)/client_bonus.c $(OBJS)
+	$(CC) $(CFLAGS) -o $(CNAME)_bonus $< $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
+
+$(BONUS_DIR)/server_bonus: $(BONUS_DIR)/server_bonus.c $(OBJS)
+	$(CC) $(CFLAGS) -o $(SNAME)_bonus $< $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -35,8 +44,8 @@ clean:
 	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(CNAME) $(SNAME)
+	$(RM) $(CNAME) $(SNAME) $(CNAME)_bonus $(SNAME)_bonus
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arturhar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,42 +9,44 @@
 /*   Updated: 2024/05/04 13:29:05 by arturhar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../include/minitalk.h"
+#include "../../include/minitalk_bonus.h"
 
-void	receive_message(int signal)
+void	send_message(pid_t pid, int i)
 {
-	static int	bit;
-	static int	i;
+    int	bit;
 
-	if (signal == SIGUSR1)
-		i |= (0x01 << bit);
-	bit++;
-	if (bit == 8)
-	{
-		ft_printf("%c", i);
-		bit = 0;
-		i = 0;
-	}
+    bit = 0;
+    while (bit < 8)
+    {
+        if ((i & (0x01 << bit)) != 0)
+            kill(pid, SIGUSR1);
+        else
+            kill(pid, SIGUSR2);
+        usleep(100);
+        bit++;
+    }
 }
 
 int	main(int argc, char **argv)
 {
-	pid_t	pid;
+    pid_t	pid;
+    int		i;
 
-    if (argc != 1)
+    i = 0;
+    if (argc == 3)
+    {
+        pid = ft_atoi(argv[1]);
+        while (argv[2][i])
+        {
+            send_message(pid, argv[2][i]);
+            i++;
+        }
+        send_message(pid, '\n');
+    }
+    else
     {
         ft_printf("WRONG FORMAT!!!\n");
-        ft_printf("USAGE: ./server\n");
-        return (1);
-    }
-	pid = getpid();
-	ft_printf("Server PID - %d\n", pid);
-    (void)argv;
-    while (argc == 1)
-    {
-        signal(SIGUSR1, receive_message);
-        signal(SIGUSR2, receive_message);
-        pause();
+        ft_printf("Usage: ./client <Server_PID> <MESSAGE>\n");
     }
     return (0);
 }
