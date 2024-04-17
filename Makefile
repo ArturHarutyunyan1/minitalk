@@ -1,51 +1,37 @@
 CNAME = client
 SNAME = server
+BCNAME = client_bonus
+BSNAME = server_bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-PRINTF_DIR = ft_printf
-LIBFT_DIR = libft
-SRC_DIR = src
-BONUS_DIR = src/bonus
-
-SRCS = $(SRC_DIR)/client.c \
-       $(SRC_DIR)/server.c \
-       $(PRINTF_DIR)/ft_format_parser.c \
-       $(PRINTF_DIR)/ft_print_hex.c \
-       $(PRINTF_DIR)/ft_printf.c \
-       $(PRINTF_DIR)/ft_printf_utils.c \
-       $(LIBFT_DIR)/ft_strlen.c \
-       $(LIBFT_DIR)/ft_itoa.c \
-       $(LIBFT_DIR)/ft_atoi.c \
-       $(LIBFT_DIR)/ft_isdigit.c
-
-OBJS = $(SRCS:.c=.o)
 RM = rm -f
+SRCS = client.c \
+       server.c
+BONUS_SRC = client_bonus.c \
+            server_bonus.c
+OBJS = $(SRCS:.c=.o)
+BOBJS = $(BONUS_SRC:.c=.o)
 
 all: $(CNAME) $(SNAME)
 
 $(CNAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(CNAME) $(SRC_DIR)/client.o $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
+	$(CC) $(CFLAGS) -o $(CNAME) client.o
 
 $(SNAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(SNAME) $(SRC_DIR)/server.o $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
+	$(CC) $(CFLAGS) -o $(SNAME) server.o
 
-bonus: $(BONUS_DIR)/client_bonus $(BONUS_DIR)/server_bonus
+$(BCNAME): $(BOBJS)
+	$(CC) $(CFLAGS) -o $(BCNAME) client_bonus.o
 
-$(BONUS_DIR)/client_bonus: $(BONUS_DIR)/client_bonus.c $(OBJS)
-	$(CC) $(CFLAGS) -o $(CNAME)_bonus $< $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
+$(BSNAME): $(BOBJS)
+	$(CC) $(CFLAGS) -o $(BSNAME) server_bonus.o
 
-$(BONUS_DIR)/server_bonus: $(BONUS_DIR)/server_bonus.c $(OBJS)
-	$(CC) $(CFLAGS) -o $(SNAME)_bonus $< $(PRINTF_DIR)/*.o $(LIBFT_DIR)/*.o
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+bonus: $(BCNAME) $(BSNAME)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(BOBJS)
 
 fclean: clean
-	$(RM) $(CNAME) $(SNAME) $(CNAME)_bonus $(SNAME)_bonus
+	$(RM) $(CNAME) $(SNAME) $(BCNAME) $(BSNAME)
 
 re: fclean all
-
-.PHONY: all clean fclean re bonus
